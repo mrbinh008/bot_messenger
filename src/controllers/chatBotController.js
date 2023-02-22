@@ -1,9 +1,9 @@
 require("dotenv").config();
 import request from "request";
-
+import ChatGPTService from "./controllers/gptBotController";
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const ChatGPTService = require("./controllers/gptBotController");
+// const ChatGPTService = require("./controllers/gptBotController");
 
 let getHomePage = (req, res) => {
   return res.send("test");
