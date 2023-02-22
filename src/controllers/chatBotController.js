@@ -21,7 +21,7 @@ class ChatGPTService {
       model: "text-davinci-003",
       prompt: fullPrompt,
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 100,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -101,13 +101,13 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message
     const chatGPT = new ChatGPTService();
     chatGPT.generateCompletion(chatMsg).then((res) => {
-      response = {
-        "text": `Trả lời : ${res}`,
-      };
+
+callSendAPI(sender_psid, res);
+
     });
     
   // Sends the response message
-  callSendAPI(sender_psid, response);
+ 
 }
 }
 
