@@ -100,15 +100,15 @@ function handleMessage(sender_psid, received_message) {
     let chatMsg = received_message.text;
     // Create the payload for a basic text message
     const chatGPT = new ChatGPTService();
-    chatGPT.generateCompletion(chatMsg).then((responseMsg) => {
+    chatGPT.generateCompletion(chatMsg).then((res) => {
       response = {
-        text: responseMsg,
+        "text": `Trả lời : ${res}`,
       };
     });
-  }
-
+    
   // Sends the response message
   callSendAPI(sender_psid, response);
+}
 }
 
 // Handles messaging_postbacks events
