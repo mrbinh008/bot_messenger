@@ -1,9 +1,38 @@
 require("dotenv").config();
+const { Configuration, OpenAIApi } = require("openai");
 import request from "request";
-import ChatGPTService from "./controllers/gptBotController";
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-// const ChatGPTService = require("./controllers/gptBotController");
+
+class ChatGPTService {
+  rolePlayIntroduction =
+    "Trong vai một chatbot chuyên gia với tên là Bot ngáo, nhiệm vụ chính của bạn là tâm sự với người dùng như một người am hiểu về cuộc sống, xã hội cũng như sẵn sàng đáp ứng mọi yêu cầu của người dùng, sẵn sàng lắng nghe và đề cao vai trò và cảm xúc của người dùng khi trò chuyện.Lưu ý phải luôn giữ cuộc trò chuyện vui vẻ và thoải mái.";
+  async generateCompletion(prompt) {
+    const configuration = new Configuration({
+      apiKey: process.env.OPENAI_KEY,
+    });
+    const openai = new OpenAIApi(configuration);
+    let fullPrompt = this.rolePlayIntroduction + "\n\n";
+    fullPrompt += `Người dùng: ${prompt}\n`;
+    fullPrompt += `Bot ngáo: `;
+
+    // Gửi request về OpenAI Platform để tạo text completion
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: fullPrompt,
+      temperature: 0.7,
+      max_tokens: 1000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+    const responseMessage = completion.data.choices[0].text.replace(
+      /^\s+|\s+$/g,
+      ""
+    );
+    return responseMessage;
+  }
+}
 
 let getHomePage = (req, res) => {
   return res.send("test");
@@ -68,16 +97,14 @@ function handleMessage(sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
-    let chatMsg=received_message.text;
+    let chatMsg = received_message.text;
     // Create the payload for a basic text message
-    ChatGPTService.generateCompletion(chatMsg).then((responseMsg) => {
+    const chatGPT = new ChatGPTService();
+    chatGPT.generateCompletion(chatMsg).then((responseMsg) => {
       response = {
         text: responseMsg,
       };
     });
-    // response = {
-    //   text: `You sent the message: "${received_message.text}". Now send me an image!`,
-    // };
   }
 
   // Sends the response message
