@@ -3,6 +3,7 @@ import request from "request";
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const ChatGPTService = require("./controllers/gptBotController");
 
 let getHomePage = (req, res) => {
   return res.send("test");
@@ -67,10 +68,16 @@ function handleMessage(sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
+    let chatMsg=received_message.text;
     // Create the payload for a basic text message
-    response = {
-      text: `You sent the message: "${received_message.text}". Now send me an image!`,
-    };
+    ChatGPTService.generateCompletion(chatMsg).then((responseMsg) => {
+      response = {
+        text: responseMsg,
+      };
+    });
+    // response = {
+    //   text: `You sent the message: "${received_message.text}". Now send me an image!`,
+    // };
   }
 
   // Sends the response message
