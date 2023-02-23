@@ -6,6 +6,23 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const API_KEY = process.env.OPENAI_KEY;
 
+    // Gửi request về OpenAI Platform để tạo text completion
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: fullPrompt,
+      temperature: 0.7,
+      max_tokens: 1000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+    const responseMessage = completion.data.choices[0].text.replace(
+      /^\s+|\s+$/g,
+      ""
+    );
+    return responseMessage;
+  }
+}
 
 let getHomePage = (req, res) => {
   return res.send("test");
@@ -79,18 +96,15 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text) {
     let chatMsg = received_message.text;
     // Create the payload for a basic text message
-    const chatbot = new ChatGPT(API_KEY);
-    async function chat(prompt) {
-      const response = await chatbot.generateText(prompt);
-      console.log(response);
-      return response;
-    }
-    let msg=chat(chatMsg);
-    response = {
-      "text": `Trả lời : ${msg}`,
-    };    
+    const chatGPT = new ChatGPTService();
+    chatGPT.generateCompletion(chatMsg).then((res) => {
+      response = {
+        "text": `Trả lời : ${res}`,
+      };
+    });
+    
   // Sends the response message
-  callSendAPI(sender_psid, response);
+ 
 }
 }
 
