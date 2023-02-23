@@ -1,5 +1,5 @@
 require("dotenv").config();
-const ChatGPTService = require("./src/services/chatgpt.service");
+const ChatGPTService = require("../services/chatgpt.service");
 import request from "request";
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
