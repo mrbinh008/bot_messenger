@@ -1,6 +1,6 @@
 require("dotenv").config();
 // const { Configuration, OpenAIApi } = require("openai");
-const ChatGPT = require('./ChatGPTController');
+const ChatGPTController = require('./ChatGPTController');
 import request from "request";
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
@@ -64,22 +64,14 @@ let postWebhook = (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
-
   // Check if the message contains text
   if (received_message.text) {
     let chatMsg = received_message.text;
     // Create the payload for a basic text message
-    const chatbot = new ChatGPT(API_KEY);
+    const chatbot = new ChatGPTController(API_KEY);
     async function chat(prompt) {
       const response = await chatbot.generateText(prompt);
       console.log(response);

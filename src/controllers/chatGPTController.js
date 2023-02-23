@@ -1,6 +1,6 @@
 const openai = require('openai');
 
-class ChatGPT {
+class ChatGPTController {
   constructor(api_key) {
     this.api_key = api_key;
     this.openai_api = new openai(api_key);
@@ -25,4 +25,4 @@ class ChatGPT {
   }
 }
 
-module.exports = ChatGPT;
+module.exports = ChatGPTController;
