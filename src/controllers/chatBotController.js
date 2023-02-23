@@ -1,10 +1,37 @@
 require("dotenv").config();
+const openai = require('openai');
 // const { Configuration, OpenAIApi } = require("openai");
-const ChatGPTController = require('./ChatGPTController');
+// const ChatGPTController = require('./ChatGPTController');
 import request from "request";
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const API_KEY = process.env.OPENAI_KEY;
+
+class ChatGPTController {
+  constructor(api_key) {
+    this.api_key = api_key;
+    this.openai_api = new openai(api_key);
+    this.engine = 'text-davinci-003';
+    this.max_tokens = 100;
+  }
+
+  async generateText(prompt) {
+    try {
+      const response = await this.openai_api.completions.create({
+        engine: this.engine,
+        prompt: prompt,
+        max_tokens: this.max_tokens,
+      });
+      return response.data.choices[0].text.replace(
+        /^\s+|\s+$/g,
+        "");
+    } catch (err) {
+      console.log(err);
+      return '';
+    }
+  }
+}
+
 
 
 let getHomePage = (req, res) => {
