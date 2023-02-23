@@ -1,38 +1,11 @@
 require("dotenv").config();
-const { Configuration, OpenAIApi } = require("openai");
+// const { Configuration, OpenAIApi } = require("openai");
+const ChatGPT = require('./ChatGPTController');
 import request from "request";
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const API_KEY = process.env.OPENAI_KEY;
 
-class ChatGPTService {
-  rolePlayIntroduction =
-    "Trong vai một chatbot chuyên gia với tên là Bot ngáo, nhiệm vụ chính của bạn là tâm sự với người dùng như một người am hiểu về cuộc sống, xã hội cũng như sẵn sàng đáp ứng mọi yêu cầu của người dùng, sẵn sàng lắng nghe và đề cao vai trò và cảm xúc của người dùng khi trò chuyện.Lưu ý phải luôn giữ cuộc trò chuyện vui vẻ và thoải mái.";
-  async generateCompletion(prompt) {
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
-    let fullPrompt = this.rolePlayIntroduction + "\n\n";
-    fullPrompt += `Người dùng: ${prompt}\n`;
-    fullPrompt += `Bot ngáo: `;
-
-    // Gửi request về OpenAI Platform để tạo text completion
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: fullPrompt,
-      temperature: 0.7,
-      max_tokens: 1000,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-    const responseMessage = completion.data.choices[0].text.replace(
-      /^\s+|\s+$/g,
-      ""
-    );
-    return responseMessage;
-  }
-}
 
 let getHomePage = (req, res) => {
   return res.send("test");
@@ -91,6 +64,13 @@ let postWebhook = (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
@@ -99,13 +79,16 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text) {
     let chatMsg = received_message.text;
     // Create the payload for a basic text message
-    const chatGPT = new ChatGPTService();
-    chatGPT.generateCompletion(chatMsg).then((res) => {
-      response = {
-        "text": `Trả lời : ${res}`,
-      };
-    });
-    
+    const chatbot = new ChatGPT(API_KEY);
+    async function chat(prompt) {
+      const response = await chatbot.generateText(prompt);
+      console.log(response);
+      return response;
+    }
+    let msg=chat(chatMsg);
+    response = {
+      "text": `Trả lời : ${msg}`,
+    };    
   // Sends the response message
   callSendAPI(sender_psid, response);
 }
