@@ -10,7 +10,7 @@ let getHomePage = (req, res) => {
     return res.send("test");
 };
 
-let getWebhook = (req, res) => {
+const getWebhook = (req, res) => {
     // Parse the query params
     let mode = req.query["hub.mode"];
     let token = req.query["hub.verify_token"];
@@ -30,7 +30,7 @@ let getWebhook = (req, res) => {
     }
 };
 
-let postWebhook = (req, res) => {
+const postWebhook = (req, res) => {
     // Parse the request body from the POST
     let body = req.body;
 
@@ -40,7 +40,7 @@ let postWebhook = (req, res) => {
         body.entry.forEach(function (entry) {
             // Gets the body of the webhook event
             let webhook_event = entry.messaging[0];
-            console.log(webhook_event);
+            // console.log(webhook_event);
 
             // Get the sender PSID
             let sender_psid = webhook_event.sender.id;
@@ -66,7 +66,6 @@ let postWebhook = (req, res) => {
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
     let response;
-let sender=sender_psid;
     // Check if the message contains text
     if (received_message.text) {
         let chatMsg = received_message.text;
@@ -75,13 +74,10 @@ let sender=sender_psid;
             response = {
                 "text": responseMsg,
             };
-    if (responseMsg) {
-            callSendAPI(sender, response);
-        }
+            if (responseMsg) {
+                callSendAPI(sender_psid, response);
+            }
         });
-        
-        // Sends the response message
-        // callSendAPI(sender_psid, response);
     }
 }
 
