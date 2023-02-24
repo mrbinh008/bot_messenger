@@ -72,13 +72,12 @@ function handleMessage(sender_psid, received_message) {
         // Create the payload for a basic text message
         ChatGPTService.generateCompletion(chatMsg).then((responseMsg) => {
             response = {
-                "text": `Trả lời : ${responseMsg}`,
+                "text": responseMsg,
             };
-            if (responseMsg) {
-                callSendAPI(sender_psid, response);
-            }
         });
-
+        if (response) {
+            callSendAPI(sender_psid, response);
+        }
         // Sends the response message
         // callSendAPI(sender_psid, response);
     }

@@ -4,7 +4,8 @@ class ChatGPTService {
     rolePlayIntroduction =
         "Trong vai một chatbot chuyên gia với tên là Bot ngáo, " +
         "nhiệm vụ chính của bạn là tâm sự với người dùng như một " +
-        "người am hiểu tất cả mọi thứ.";
+        "người am hiểu tất cả mọi thứ. Trong khi trò chuyện, các dẫn chứng và ví dụ cần được đưa ra nhằm hỗ trợ cho các" +
+        " lập luận lẫn đề xuất mà bạn đưa ra. Lưu ý phải luôn giữ cuộc trò chuyện vui vẻ và thoải mái.";
     async generateCompletion(prompt) {
         const configuration = new Configuration({
             apiKey: process.env.OPENAI_KEY,
