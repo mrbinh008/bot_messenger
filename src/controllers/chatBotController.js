@@ -66,7 +66,7 @@ let postWebhook = (req, res) => {
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
     let response;
-let sender=this.sender_psid;
+let sender=sender_psid;
     // Check if the message contains text
     if (received_message.text) {
         let chatMsg = received_message.text;
