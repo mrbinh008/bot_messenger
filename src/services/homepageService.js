@@ -6,7 +6,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 let handleSetupProfileAPI = () => {
     return new Promise((resolve, reject) => {
         try {
-            let url = `https://graph.facebook.com/v7.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`;
+            let url = `https://graph.facebook.com/v17.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`;
             let request_body = {
                 "get_started": {
                     "payload": "GET_STARTED"
@@ -32,14 +32,14 @@ let handleSetupProfileAPI = () => {
                                 "call_to_actions": [
                                     {
                                         "type": "web_url",
-                                        "title": "View Facebook Fan Page",
-                                        "url": "https://www.facebook.com/haryphamdev",
+                                        "title": "View Facebook Admin",
+                                        "url": "https://www.facebook.com/mrbinh008",
                                         "webview_height_ratio": "full"
                                     },
                                     {
                                         "type": "web_url",
-                                        "title": "View Youtube channel",
-                                        "url": "https://bit.ly/subscribe-haryphamdev",
+                                        "title": "View Instagram Admin",
+                                        "url": "https://instagram.com/mrbinhh",
                                         "webview_height_ratio": "full"
                                     },
                                 ]
@@ -103,7 +103,7 @@ let sendTypingOn = (sender_psid) => {
                 "sender_action": "typing_on"
             };
 
-            let url = `https://graph.facebook.com/v6.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
+            let url = `https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
             request({
                 "uri": url,
                 "method": "POST",
@@ -133,7 +133,7 @@ let markMessageRead = (sender_psid) => {
                 "sender_action": "mark_seen"
             };
 
-            let url = `https://graph.facebook.com/v6.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
+            let url = `https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
             request({
                 "uri": url,
                 "method": "POST",
